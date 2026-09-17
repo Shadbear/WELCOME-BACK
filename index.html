@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WELCOME BACK</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/glitch.css">
+    <link rel="stylesheet" href="css/horror-fx.css">
+</head>
+<body>
+
+    <div class="crt-overlay"></div>
+    <div id="start-prompt">[ HAZ CLICK EN CUALQUIER LUGAR PARA ENTRAR ]</div>
+
+    <!-- Fondo dinámico Canvas y destello -->
+    <canvas id="bg-canvas"></canvas>
+    <div class="center-flare"></div>
+
+    <!-- Interfaz principal -->
+    <div class="viewport" id="main-viewport">
+        <!-- Vista Inicial: Título y Botón -->
+        <h1 class="horror-title" id="title" data-text="WELCOME BACK">WELCOME<br>BACK</h1>
+
+        <div class="button-wrapper">
+            <button id="btn-iniciar" class="dark-btn">INICIAR</button>
+        </div>
+
+        <!-- Pantalla de Selección de Desastres (Oculta por defecto) -->
+        <div id="disaster-screen" class="disaster-container hidden">
+            <h2 class="disaster-title" data-text="ESCOGE UN DESASTRE">ESCOGE UN DESASTRE</h2>
+            
+            <div class="cards-grid">
+                <!-- Tarjeta 1 -->
+                <div class="disaster-card">
+                    <div class="card-frame">
+                        <div class="card-image-placeholder img-tsunami"></div>
+                        <div class="card-overlay"></div>
+                    </div>
+                    <button class="card-btn">Hijo de Madre</button>
+                </div>
+
+                <!-- Tarjeta 2 -->
+                <div class="disaster-card">
+                    <div class="card-frame">
+                        <div class="card-image-placeholder img-blackout"></div>
+                        <div class="card-overlay"></div>
+                    </div>
+                    <button class="card-btn">Soledad Eterna</button>
+                </div>
+
+                <!-- Tarjeta 3 -->
+                <div class="disaster-card">
+                    <div class="card-frame">
+                        <div class="card-image-placeholder img-outbreak"></div>
+                        <div class="card-overlay"></div>
+                    </div>
+                    <button class="card-btn">Sangre Fria</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor para las preguntas siniestras e imágenes de auxilio -->
+    <div id="whisper-container"></div>
+    <div id="panic-images-container"></div>
+
+    <!-- Scripts modularizados -->
+    <script src="js/background.js"></script>
+    <script src="js/whispers.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/interaction.js"></script>
+</body>
+</html>
