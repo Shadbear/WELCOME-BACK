@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WELCOME BACK</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/glitch.css">
+    <link rel="stylesheet" href="css/horror-fx.css">
+</head>
+<body>
+
+    <div class="crt-overlay"></div>
+    <div id="start-prompt">[ HAZ CLICK EN CUALQUIER LUGAR PARA ENTRAR ]</div>
+
+    <!-- Fondo dinámico Canvas y destello -->
+    <canvas id="bg-canvas"></canvas>
+    <div class="center-flare"></div>
+
+    <!-- Interfaz principal -->
+    <div class="viewport" id="main-viewport">
+        <!-- Vista Inicial: Título y Botón -->
+        <h1 class="horror-title" id="title" data-text="WELCOME BACK">WELCOME<br>BACK</h1>
+
+        <div class="button-wrapper">
+            <button id="btn-iniciar" class="dark-btn">INICIAR</button>
+        </div>
+
+        <!-- Pantalla del Personaje Misterioso (Oculta por defecto) -->
+        <div id="disaster-screen" class="entity-container hidden">
+            <div class="entity-eyes">
+                <div class="entity-eye"></div>
+                <div class="entity-eye"></div>
+            </div>
+
+            <p id="entity-message" class="entity-message">Buenas noches, usuario. Podría decirle ahora mismo el nombre exacto de este equipo desde el que le hablo... pero eso solo lo asustaría antes de tiempo. Por ahora, "usuario" estará bien.</p>
+
+            <div id="entity-lore-image" class="entity-lore-image hidden">
+                <img id="entity-lore-img" src="" alt="">
+            </div>
+
+            <div class="search-bar-wrapper">
+                <input type="text" id="entity-input" class="entity-input" placeholder="Escríbele algo..." autocomplete="off">
+                <button id="entity-send" class="entity-send-btn">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor para las preguntas siniestras e imágenes de auxilio -->
+    <div id="whisper-container"></div>
+    <div id="panic-images-container"></div>
+
+    <!-- Scripts modularizados -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="js/background.js"></script>
+    <script src="js/whispers.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/interaction.js"></script>
+</body>
+</html>

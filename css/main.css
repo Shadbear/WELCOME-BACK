@@ -1,0 +1,397 @@
+:root {
+    --red-glow: #ff0033;
+    --dark-red: #800014;
+    --bg-black: #000000;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--bg-black);
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    cursor: crosshair;
+}
+
+/* Canvas de fondo */
+#bg-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Destello sutil central */
+.center-flare {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, #ffffff 0%, #a200ff 30%, #2b00ff 60%, transparent 80%);
+    border-radius: 50%;
+    z-index: 2;
+    box-shadow: 0 0 40px #8c00ff, 0 0 80px #1a00ff;
+    animation: pulse-flare 2.5s infinite alternate ease-in-out;
+    pointer-events: none;
+}
+
+/* CRT MÁS SUAVE Y SUTIL (Líneas finas casi transparentes) */
+.crt-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none;
+    background: linear-gradient(
+        rgba(0, 0, 0, 0) 50%, 
+        rgba(0, 0, 0, 0.25) 50%
+    );
+    background-size: 100% 3px;
+}
+
+/* Viñeta para forzar el centro negro profundo de la imagen de referencia */
+body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+    background: radial-gradient(circle at center, transparent 20%, rgba(0, 0, 0, 0.85) 65%, #000000 95%);
+}
+
+/* Viewport Principal Centrado */
+.viewport {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+}
+
+.horror-title {
+    color: var(--red-glow);
+    font-size: 5.5rem;
+    font-weight: 900;
+    letter-spacing: 0.8rem;
+    text-transform: uppercase;
+    text-shadow: 
+        0 0 10px var(--red-glow),
+        0 0 25px var(--red-glow),
+        0 0 50px var(--dark-red);
+    position: relative;
+    animation: flicker 0.12s infinite alternate, pulse-text 3s infinite ease-in-out;
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 2.5rem;
+}
+
+/* BOTÓN NEGRO QUE CAMBIA A ROJO INTENSO CON LETRA NEGRA EN HOVER */
+.button-wrapper {
+    position: relative;
+    z-index: 6;
+}
+
+.dark-btn {
+    background-color: #000000;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    padding: 16px 50px;
+    font-size: 1.6rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 900;
+    letter-spacing: 0.3rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.15s ease-in-out;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.9);
+}
+
+.dark-btn:hover {
+    background-color: #ff0000 !important;
+    color: #000000 !important;
+    border-color: #000000 !important;
+    box-shadow: 0 0 30px #ff0000, 0 0 60px #ff0000 !important;
+    letter-spacing: 0.5rem;
+    transform: scale(1.1);
+}
+
+/* MODALIDAD SINIESTRA (Corta color al entorno salvo al botón) */
+body.monochrome-horror #bg-canvas,
+body.monochrome-horror .center-flare,
+body.monochrome-horror .horror-title,
+body.monochrome-horror .whisper-text {
+    filter: grayscale(100%) contrast(200%) brightness(70%);
+}
+
+body.monochrome-horror {
+    animation: screen-shake 0.04s infinite alternate ease-in-out;
+}
+
+/* ==========================================================================
+   SECTOR: SELECCIÓN DE DESASTRE
+   ========================================================================== */
+
+   .hidden {
+    display: none !important;
+}
+
+.entity-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    max-width: 1100px;
+    z-index: 20;
+    background-color: #000000;
+    padding: 8vh 20px 6vh;
+    animation: fade-in-horror 0.5s ease-out forwards;
+}
+
+/* Par de ojos morados en la parte superior */
+.entity-eyes {
+    display: flex;
+    gap: 6rem;
+    margin-top: 2rem;
+}
+
+.entity-eye {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #e0aaff 0%, #a200ff 45%, #4b0082 80%);
+    box-shadow: 0 0 20px #a200ff, 0 0 45px #8c00ff, 0 0 80px rgba(162, 0, 255, 0.6);
+    animation: eye-blink 4.5s infinite ease-in-out;
+}
+
+.entity-eye:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+@keyframes eye-blink {
+    0%, 92%, 100% { transform: scaleY(1); opacity: 1; }
+    95% { transform: scaleY(0.05); opacity: 0.6; }
+}
+
+/* Estado de enojo: siguen siendo morados, pero más intensos y agresivos */
+.entity-eyes.angry .entity-eye {
+    animation: eye-angry-shake 0.12s infinite alternate, eye-angry-glow 0.5s infinite alternate;
+    border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+}
+
+@keyframes eye-angry-shake {
+    0% { transform: translate(0, 0) scaleY(0.6); }
+    100% { transform: translate(1px, -1px) scaleY(0.5); }
+}
+
+@keyframes eye-angry-glow {
+    0% { box-shadow: 0 0 20px #a200ff, 0 0 45px #8c00ff; background: radial-gradient(circle, #e0aaff 0%, #a200ff 45%, #4b0082 80%); }
+    100% { box-shadow: 0 0 40px #d200ff, 0 0 80px #b400ff, 0 0 120px rgba(200, 0, 255, 0.85); background: radial-gradient(circle, #f2d1ff 0%, #c800ff 45%, #4b0082 80%); }
+}
+
+/* El mensaje también se tensa un poco cuando Neo pierde la paciencia */
+.entity-message.angry {
+    color: #f2d1ff;
+    text-shadow: 0 0 14px rgba(200, 0, 255, 0.9);
+}
+
+/* Mensaje del personaje misterioso */
+.entity-message {
+    color: #d9b3ff;
+    font-family: 'Times New Roman', Times, serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    letter-spacing: 0.1rem;
+    text-align: center;
+    text-shadow: 0 0 12px rgba(162, 0, 255, 0.7);
+    max-width: 600px;
+    animation: flicker 0.3s infinite alternate;
+}
+
+/* Imagen de lore que aparece al mencionar ciertos nombres */
+.entity-lore-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 260px;
+    max-height: 30vh;
+    margin: 0.5rem 0;
+    animation: fade-in-horror 0.6s ease-out forwards;
+}
+
+.entity-lore-image img {
+    max-width: 100%;
+    max-height: 30vh;
+    object-fit: contain;
+    filter: drop-shadow(0 0 20px rgba(162, 0, 255, 0.6));
+    border: 2px solid #4b0082;
+}
+
+/* Barra de búsqueda inferior */
+.search-bar-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    border: 2px solid #a200ff;
+    border-radius: 30px;
+    background-color: #050005;
+    box-shadow: 0 0 20px rgba(162, 0, 255, 0.5);
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.entity-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.05rem;
+    letter-spacing: 0.05rem;
+    padding: 16px 20px;
+    user-select: text;
+}
+
+.entity-input::placeholder {
+    color: #7a4b99;
+}
+
+.entity-send-btn {
+    background-color: transparent;
+    border: none;
+    color: #a200ff;
+    font-size: 1.4rem;
+    padding: 0 22px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.entity-send-btn:hover {
+    color: #e0aaff;
+    text-shadow: 0 0 15px #a200ff;
+}
+
+@keyframes fade-in-horror {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* PREGUNTAS BLANCAS EN BORDES */
+.whisper-text {
+    position: absolute;
+    z-index: 4;
+    color: #ffffff;
+    font-family: 'Times New Roman', Times, serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    letter-spacing: 0.15rem;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    max-width: 300px;
+    text-align: center;
+}
+
+.whisper-text.visible {
+    opacity: 0.85;
+}
+
+/* AVISOS DE PÁNICO */
+.panic-banner {
+    position: fixed; /* Cambiado a fixed para posicionamiento exacto */
+    z-index: 10;
+    pointer-events: none !important; /* Evita que rompa el hover del botón */
+    background: #000000;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    padding: 8px 16px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 900;
+    font-size: 1.1rem;
+    letter-spacing: 0.2rem;
+    text-transform: uppercase;
+    box-shadow: 0 0 15px #ffffff;
+}
+
+/* Elevar la prioridad del botón por encima de los mensajes */
+.button-wrapper {
+    position: relative;
+    z-index: 20 !important; /* Capa superior absoluta */
+}
+
+.dark-btn {
+    position: relative;
+    z-index: 21 !important;
+}
+
+/* AVISO INICIAL CENTRADO */
+#start-prompt {
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ff0033;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.2rem;
+    letter-spacing: 0.3rem;
+    cursor: pointer;
+    transition: opacity 1s ease;
+    text-shadow: 0 0 10px #ff0033;
+}
+
+@keyframes pulse-flare {
+    0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.7; }
+    100% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+}
+
+@keyframes flicker {
+    0% { opacity: 0.95; }
+    50% { opacity: 1; }
+    52% { opacity: 0.4; }
+    54% { opacity: 1; }
+    80% { opacity: 0.9; }
+    90% { opacity: 0.2; }
+    100% { opacity: 1; }
+}
+
+@keyframes pulse-text {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+}
+
+@keyframes screen-shake {
+    0% { transform: translate(1px, 1px); }
+    50% { transform: translate(-2px, -1px); }
+    100% { transform: translate(1px, -2px); }
+}
